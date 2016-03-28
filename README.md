@@ -10,4 +10,4 @@
 
 #### Alternately, if you want to run it on github pages,
 
-Go [Here](anirvachan.github.io/frotend-nanodegree-neighborhood-map)
+Go [Here](http://anirvachan.github.io/frontend-nanodegree-neighborhood-map/)
