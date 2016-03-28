@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Neighborhood Map</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+      <div class="row- top-row">
+        <div id='searchDiv'>
+          <input type="search" class="form-control" id="searchBar" data-bind="event:{keyup: searchPlaces}" placeholder="Search..." />
+
+        </div>
+        <div class='linediv'>
+        <div class="line firstline"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        </div>
+    
+    </div> 
+    <div class="row-">
+        
+        <div class="" id="googleMap" style="height:700px">
+        </div>
+
+        <div class="" id= "stack">
+            <ul class='nav nav-pills nav-stacked' data-bind="foreach:observableNames">
+              
+              <li><a data-bind="text:$data, click:$root.clickHandler" href="#"></a></li>
+
+            </ul>
+        </div>
+    </div>
+
+
+
+    <script src="http://maps.googleapis.com/maps/api/js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  	<script type="text/javascript" src="js/knockout-3.4.0.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+  <script type="text/javascript" src="js/layout.js"></script>
+
+</body>
+</html>
