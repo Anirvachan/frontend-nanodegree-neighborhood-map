@@ -1,5 +1,6 @@
 var map;
 
+// Initialize Google Map
 function initMap() {
     var myLatLng = {
             lat: 12.935522, 
@@ -10,11 +11,15 @@ function initMap() {
         center: myLatLng
     });
 
+    // Apply Knockout.js bindings.
     ko.applyBindings(new viewModel());
 }
 
+//Call initMap() once the window loads.
 google.maps.event.addDomListener(window, 'load', initMap);
 
+//Helper function to add a marker to the page.
+//Uses the restaurant icon instead of the original Google Map balloon.
 var addMarker = function(theMap, latLng) {
     var iconBase = 'http://maps.google.com/mapfiles/ms/micons/';
     var marker = new google.maps.Marker({
@@ -26,6 +31,7 @@ var addMarker = function(theMap, latLng) {
     return marker;
 }
 
+//Set of locations, hardcoded along with title, foursquare ID and coordinates.
 var locations = [{
 
         coordinates: {
@@ -141,7 +147,7 @@ var locations = [{
 
 ];
 
-
+// Helper function to convert each location in the locations array into a Place object.
 function place(data) {
     this.title = data.title;
     this.coordinates = data.coordinates;
@@ -150,6 +156,8 @@ function place(data) {
     this.venueId = data.venueId;
 };
 
+
+//Helper function to format the details which will be received from foursquare after an AJAX call.
 function detailFormatter(detailsArray) {
     var details = '';
     detailsArray.forEach(function(detail) {
@@ -158,6 +166,8 @@ function detailFormatter(detailsArray) {
     return details;
 }
 
+// Helper function to activate the marker,i.e, to animate it and cause the relevant infowindow to pop up
+// when we click the marker.
 function activateMarker(object, infowindow) {
            console.log(object.details);
 
@@ -169,17 +179,31 @@ function activateMarker(object, infowindow) {
              setTimeout(function(){ object.marker.setAnimation(null); }, 750);
 }
 
+// The function with the AJAX request to the foursquare API, to get the detais of recent reviews of all the restaurants.
 function getDetails(object) {
         
+        // Array to told the reviews for the particular Place object.
         var topTips = [];
+
+        //Foursquare URL with ClientID and Client Secret ID, along with venue ID for the particular venue.
+        //Fetches the five latest reviews.
         var venueUrl = 'https://api.foursquare.com/v2/venues/' + object.venueId + '/tips?sort=recent&limit=5&v=20160311&client_id=RR4S5124LFE1CSJ0FLS4WOA4CQF2PB4X53TDXBCIWZ5WLK40&client_secret=B5IPIYRLBPTGPQUHWACDR3GUETYJX102DJMFGDMQ0QUWUNDW';
-    
+        
+        //AJAX request
         $.getJSON(venueUrl, function(data) {
+
+            // Get the set of reviews for the venue, and store it in items.
             var items = data.response.tips.items;
+
+            //Iterate over the list of items, convert each item to a string and push it into the topTips array.
             items.forEach(function(item) {
                 topTips.push(String(item.text));
             })
+
+            //Store the topTips array in the details property of the object.
             object.details = topTips;
+
+            //Format it so that it looks good, and turn it into a string instead of array.
             object.details = detailFormatter(object.details);
         });
 
@@ -189,28 +213,25 @@ var viewModel = function() {
     var self = this;
     self.infowindow = new google.maps.InfoWindow();
     
-
+    //Array containing the names of the places.
     self.placeNames = [];
-    self.observableNames = ko.observableArray([]);
-    self.test = ko.observableArray([{name:'nmnk'},{name:'yuzy'}]);
 
+    //Knockout observable array which is bound to the list displayed on the screen.
+    self.observableNames = ko.observableArray([]);
+
+        //For each location,
         locations.forEach(function(location) {
+
+        //Convert the item into a Place object.
         var placeObject = new place(location);
+
+        //Get Foursquare reviews for that particular place.
         getDetails(placeObject);
 
-        //********************************************************************************************************
-
+        // When marker is clicked on, show infowindow with reviews.
         google.maps.event.addListener(placeObject.marker, 'click', function() {
-
-            /*self.infowindow.setContent('<h2><b>'+ placeObject.title + '<b></h2><p>' + placeObject.content + '</p>');
-            self.infowindow.open(map, placeObject.marker);
-
-             placeObject.marker.setAnimation(google.maps.Animation.BOUNCE);
-
-             setTimeout(function(){ placeObject.marker.setAnimation(null); }, 750);*/
              activateMarker(placeObject, self.infowindow);
         });
-        //********************************************************************************************************
 
         self.placeNames.push(placeObject);
         self.observableNames.push(placeObject.title);
@@ -218,7 +239,7 @@ var viewModel = function() {
     });
 
     
-
+    //Click event handler which is called when the user clicks on a list item on screen.
     self.clickHandler = function(item) {
         self.placeNames.forEach(function(element) {
             if (item === element.title) {
@@ -227,15 +248,30 @@ var viewModel = function() {
         });
     }
 
+    //Search function to filter possible results based on user input.
     self.searchPlaces = function() {
+
+        //Get string from search field and convert it to lowercase.
         var searchString = document.getElementById('searchBar').value.toLowerCase();
+        
+        //Populate Knockout observable array with an empty array.
+        //Note that placenames is a list of Place objects, whereas observableNames is an observable array containing names only.
         self.observableNames([]);
+
+        //When the event handler is called, it typically means that the user has started typing into the search field.
+        //If typing has just started, all markers are invisible.
         self.placeNames.forEach(function(place) {
             place.marker.setVisible(false);
         })
         self.infowindow.close();
+
+        //For each place Object,
         self.placeNames.forEach(function(place){
+
+            //If search string is part of the title of the place object,
             if (place.title.toLowerCase().indexOf(searchString) > -1) {
+
+                //Push the title into the observable array, and set marker to visible.
                 self.observableNames.push(place.title);
                 place.marker.setVisible(true);
             }

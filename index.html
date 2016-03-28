@@ -11,23 +11,33 @@
 
 </head>
 <body>
+
+      <!-- Row with search bar and Hamburger icon. -->
       <div class="row- top-row">
+
+        <!-- Div with search bar -->
         <div id='searchDiv'>
           <input type="search" class="form-control" id="searchBar" data-bind="event:{keyup: searchPlaces}" placeholder="Search..." />
 
         </div>
+
+        <!-- Div with hamburger icon -->
         <div class='linediv'>
         <div class="line firstline"></div>
         <div class="line"></div>
         <div class="line"></div>
         </div>
     
-    </div> 
+    </div>
+
+    <!-- Container for googleMap Div and list of items --> 
     <div class="row-">
-        
+
+        <!-- googleMap div-->
         <div class="" id="googleMap" style="height:700px">
         </div>
 
+        <!-- List of observable items -->
         <div class="" id= "stack">
             <ul class='nav nav-pills nav-stacked' data-bind="foreach:observableNames">
               
