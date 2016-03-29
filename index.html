@@ -10,50 +10,75 @@
     <link rel="stylesheet" href="css/style.css">
 
 </head>
+
 <body>
 
-      <!-- Row with search bar and Hamburger icon. -->
-      <div class="row- top-row">
+    <!-- Row with search bar and Hamburger icon. -->
+    <div class="row- top-row">
 
         <!-- Div with search bar -->
         <div id='searchDiv'>
-          <input type="search" class="form-control" id="searchBar" data-bind="event:{keyup: searchPlaces}" placeholder="Search..." />
+            <input type="search" class="form-control" id="searchBar" data-bind="event:{keyup: searchPlaces}" placeholder="Search..." />
 
         </div>
 
         <!-- Div with hamburger icon -->
-        <div class='linediv'>
-        <div class="line firstline"></div>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class='linediv' data-bind="click:toggleSlider">
+            <div class="line firstline"></div>
+            <div class="line"></div>
+            <div class="line"></div>
         </div>
-    
+
     </div>
 
-    <!-- Container for googleMap Div and list of items --> 
+    <!-- Container for googleMap Div and list of items -->
     <div class="row-">
 
         <!-- googleMap div-->
-        <div class="" id="googleMap" style="height:700px">
+        <div class="map" id="googleMap" style="height:100vh">
         </div>
 
         <!-- List of observable items -->
-        <div class="" id= "stack">
+        <div class="" id="stack">
             <ul class='nav nav-pills nav-stacked' data-bind="foreach:observableNames">
-              
-              <li><a data-bind="text:$data, click:$root.clickHandler" href="#"></a></li>
+
+                <li>
+                    <a data-bind="text:$data, click:$root.clickHandler" href="#"></a>
+                </li>
 
             </ul>
         </div>
     </div>
 
+    <script type="text/javascript">
+        var map;
 
+        // Initialize Google Map
+        function initMap() {
+            var myLatLng = {
+                lat: 12.935522,
+                lng: 77.618123
+            };
+            map = new google.maps.Map(document.getElementById('googleMap'), {
+                zoom: 17,
+                center: myLatLng
+            });
 
-    <script src="http://maps.googleapis.com/maps/api/js"></script>
+            // Apply Knockout.js bindings.
+            ko.applyBindings(new viewModel());
+        }
+
+        function googleError() {
+            alert("Please check your Internet connection. Google Maps has failed to load.");
+        }
+    </script>
+
+    <!--Notice initMap callback appended to Google Map src string -->
+    <script async src="http://maps.googleapis.com/maps/api/js?callback=initMap" onError = "googleError()"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-  	<script type="text/javascript" src="js/knockout-3.4.0.js"></script>
-	<script type="text/javascript" src="js/main.js"></script>
-  <script type="text/javascript" src="js/layout.js"></script>
+    <script type="text/javascript" src="js/knockout-3.4.0.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
 
 </body>
+
 </html>

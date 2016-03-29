@@ -1,68 +1,76 @@
-
 .row- {
-  width: 100%;
-  margin-bottom: 3px;
-
+    width: 100%;
+    margin-bottom: 3px;
 }
 
 .top-row {
-  z-index: 3;
-  position: fixed;
+    z-index: 3;
+    position: fixed;
 }
 
 #searchDiv {
-  margin-left: 3px;
-  margin-right: 0px;
-  width: 50%;
-  display: inline-block;
-  border: 2px solid yellow;
+    margin-left: 3px;
+    margin-right: 0px;
+    width: 50%;
+    display: inline-block;
+    border: 2px solid yellow;
 }
 
 .linediv {
-	float: right;
-  width: 50px;
-  display: inline;
-  padding-top: 5px;
-  cursor: pointer;
+    float: right;
+    width: 50px;
+    display: inline;
+    padding-top: 5px;
+    cursor: pointer;
 }
 
 .line {
-    border-bottom: 4px solid #bbb;
+    border-bottom: 4px solid red;
     width: 35px;
     margin-bottom: 6px;
-  }
+}
 
-  #googleMap {
+.map {
     position: relative;
-  }
+}
 
-  ul {
-  	border: 3px solid black;
-  }
-  li {
-  	border: 2px solid black;
-  	background-color: #ff6600;
-  }
+ul {
+    border: 3px solid black;
+}
 
-  li a {
-  	color: black;
-  	font-weight: bold;
-  }
+li {
+    border: 2px solid black;
+    background-color: #ff6600;
+}
 
-  h3 {
+li a {
+    color: black;
+    font-weight: bold;
+}
+
+h3 {
     color: #660066;
-  }
-  h6 {
-    color: #9900cc;
-  }
-  p {
-    color: #9900ff;
-  }
+}
 
- #stack {
+h6 {
+    color: #9900cc;
+}
+
+p {
+    color: #9900ff;
+}
+
+#stack {
     position: fixed;
     z-index: 99;
     top: 70px;
     right: 10px;
- }
+}
 
+.toggled {
+    overflow: hidden;
+    padding-top: 0;
+    padding-bottom: 0;
+    height: 0;
+    border-width: 0 1px;
+}

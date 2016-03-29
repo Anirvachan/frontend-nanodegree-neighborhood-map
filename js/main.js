@@ -1,23 +1,3 @@
-var map;
-
-// Initialize Google Map
-function initMap() {
-    var myLatLng = {
-            lat: 12.935522, 
-            lng: 77.618123
-        };
-    map = new google.maps.Map(document.getElementById('googleMap'), {
-        zoom: 17,
-        center: myLatLng
-    });
-
-    // Apply Knockout.js bindings.
-    ko.applyBindings(new viewModel());
-}
-
-//Call initMap() once the window loads.
-google.maps.event.addDomListener(window, 'load', initMap);
-
 //Helper function to add a marker to the page.
 //Uses the restaurant icon instead of the original Google Map balloon.
 var addMarker = function(theMap, latLng) {
@@ -29,7 +9,7 @@ var addMarker = function(theMap, latLng) {
         icon: iconBase + 'restaurant.png'
     });
     return marker;
-}
+};
 
 //Set of locations, hardcoded along with title, foursquare ID and coordinates.
 var locations = [{
@@ -53,16 +33,16 @@ var locations = [{
         title: "Chianti",
         content: "Italian Restaurant",
         venueId: '4fa944cce4b02c573aa1f27c',
-        details:''
+        details: ''
     }, {
         coordinates: {
-            lat: 12.937371, 
+            lat: 12.937371,
             lng: 77.617608
         },
         title: "Dyu Art Cafe",
         content: "Café",
         venueId: '5264a31011d252c0294134f2',
-        details:''
+        details: ''
     }, {
         coordinates: {
             lat: 12.937140,
@@ -71,9 +51,8 @@ var locations = [{
         title: "Sree Krishna Kafe",
         content: "Breakfast Spot, Indian Restaurant, and Asian Restaurant",
         venueId: '4cf510727e0da1cdb763a597',
-        details:''
-    },
-    {
+        details: ''
+    }, {
         coordinates: {
             lat: 12.936445,
             lng: 77.615022
@@ -81,67 +60,61 @@ var locations = [{
         title: "Zingron - Naga Kitchen",
         content: "Diner and Indian Restaurant",
         venueId: '4d4d759372eba1430ca34312',
-        details:''
-    },
-    {
+        details: ''
+    }, {
         coordinates: {
-            lat: 12.933763, 
+            lat: 12.933763,
             lng: 77.620573
         },
         title: "Mainland China",
         content: "Chinese Restaurant",
         venueId: '4e23040c62e1964dbb7708de',
-        details:''
-    },
-    {
+        details: ''
+    }, {
         coordinates: {
-            lat: 12.934441, 
+            lat: 12.934441,
             lng: 77.613428
         },
         title: "Gramin",
         content: "Indian Restaurant",
         venueId: '4bdc11da383276b06bc27369',
-        details:''
-    },
-    {
+        details: ''
+    }, {
         coordinates: {
-            lat: 12.933589, 
+            lat: 12.933589,
             lng: 77.622159
         },
         title: "Cafe D'Hide",
         content: "Café",
         venueId: '5558a326498e2877ccf1051d',
-        details:''
-    },
-    {
+        details: ''
+    }, {
         coordinates: {
-            lat: 12.935005, 
-            lng:  77.615999
+            lat: 12.935005,
+            lng: 77.615999
         },
         title: "Moscow Mule Bar & Grill",
         content: "Bar",
         venueId: '4e931f4793adf0b0009bbb79',
-        details:''
-    },
-    {
+        details: ''
+    }, {
         coordinates: {
-            lat: 12.932864, 
-            lng:  77.614796
+            lat: 12.932864,
+            lng: 77.614796
         },
         title: "Gilly's Rest-O-Bar",
         content: "Bar",
         venueId: '53a5aa42498e7989b0b0bb3d',
-        details:''
-    },
-    {
+        details: ''
+    }, {
         coordinates: {
             lat: 12.935227,
-            lng:  77.613673
+            lng: 77.613673
         },
         title: "Fenny's Lounge & Kitchen",
         content: "Lounge, Pizza Place, and Mediterranean Restaurant",
         venueId: '512dd16dd86cdfb81d74a7fc',
-        details:''
+        details: ''
     }
 
 
@@ -154,14 +127,14 @@ function place(data) {
     this.marker = addMarker(map, this.coordinates);
     this.content = data.content;
     this.venueId = data.venueId;
-};
+}
 
 
 //Helper function to format the details which will be received from foursquare after an AJAX call.
 function detailFormatter(detailsArray) {
     var details = '';
     detailsArray.forEach(function(detail) {
-        details += '<p>'+detail+'</p>';
+        details += '<p>' + detail + '</p>';
     });
     return details;
 }
@@ -169,28 +142,31 @@ function detailFormatter(detailsArray) {
 // Helper function to activate the marker,i.e, to animate it and cause the relevant infowindow to pop up
 // when we click the marker.
 function activateMarker(object, infowindow) {
-           console.log(object.details);
+    console.log(object.details);
 
-            infowindow.setContent('<h3><b>'+ object.title + '</b></h3><h6>'+ object.content + '</h6>' + object.details);
-            infowindow.open(map, object.marker);
+    infowindow.setContent('<h3><b>' + object.title + '</b></h3><h6>' + object.content + '</h6>' + object.details);
+    infowindow.open(map, object.marker);
 
-             object.marker.setAnimation(google.maps.Animation.BOUNCE);
+    object.marker.setAnimation(google.maps.Animation.BOUNCE);
 
-             setTimeout(function(){ object.marker.setAnimation(null); }, 750);
+    setTimeout(function() {
+        object.marker.setAnimation(null);
+    }, 750);
 }
 
 // The function with the AJAX request to the foursquare API, to get the detais of recent reviews of all the restaurants.
 function getDetails(object) {
-        
-        // Array to told the reviews for the particular Place object.
-        var topTips = [];
 
-        //Foursquare URL with ClientID and Client Secret ID, along with venue ID for the particular venue.
-        //Fetches the five latest reviews.
-        var venueUrl = 'https://api.foursquare.com/v2/venues/' + object.venueId + '/tips?sort=recent&limit=5&v=20160311&client_id=RR4S5124LFE1CSJ0FLS4WOA4CQF2PB4X53TDXBCIWZ5WLK40&client_secret=B5IPIYRLBPTGPQUHWACDR3GUETYJX102DJMFGDMQ0QUWUNDW';
-        
-        //AJAX request
-        $.getJSON(venueUrl, function(data) {
+    // Array to told the reviews for the particular Place object.
+    var topTips = [];
+
+    //Foursquare URL with ClientID and Client Secret ID, along with venue ID for the particular venue.
+    //Fetches the five latest reviews.
+    var venueUrl = 'https://api.foursquare.com/v2/venues/' + object.venueId + '/tips?sort=recent&limit=5&v=20160311&client_id=RR4S5124LFE1CSJ0FLS4WOA4CQF2PB4X53TDXBCIWZ5WLK40&client_secret=B5IPIYRLBPTGPQUHWACDR3GUETYJX102DJMFGDMQ0QUWUNDW';
+
+    //AJAX request
+    $.getJSON(venueUrl)
+        .done(function(data) {
 
             // Get the set of reviews for the venue, and store it in items.
             var items = data.response.tips.items;
@@ -198,29 +174,35 @@ function getDetails(object) {
             //Iterate over the list of items, convert each item to a string and push it into the topTips array.
             items.forEach(function(item) {
                 topTips.push(String(item.text));
-            })
+            });
 
             //Store the topTips array in the details property of the object.
             object.details = topTips;
 
             //Format it so that it looks good, and turn it into a string instead of array.
             object.details = detailFormatter(object.details);
+        })
+        .fail(function(jqxhr, textStatus, error) {
+            var err = textStatus + ", " + error;
+            console.log("Request Failed: " + err);
+            alert('Ajax request to Foursquare failed. Please check your internet connection. If everything is fine on your side, please try again later.');
         });
 
-    }  
+
+}
 
 var viewModel = function() {
     var self = this;
     self.infowindow = new google.maps.InfoWindow();
-    
+
     //Array containing the names of the places.
     self.placeNames = [];
 
     //Knockout observable array which is bound to the list displayed on the screen.
     self.observableNames = ko.observableArray([]);
 
-        //For each location,
-        locations.forEach(function(location) {
+    //For each location,
+    locations.forEach(function(location) {
 
         //Convert the item into a Place object.
         var placeObject = new place(location);
@@ -230,7 +212,7 @@ var viewModel = function() {
 
         // When marker is clicked on, show infowindow with reviews.
         google.maps.event.addListener(placeObject.marker, 'click', function() {
-             activateMarker(placeObject, self.infowindow);
+            activateMarker(placeObject, self.infowindow);
         });
 
         self.placeNames.push(placeObject);
@@ -238,7 +220,11 @@ var viewModel = function() {
 
     });
 
-    
+    //Function that animates listView when clicked on the hamburger icon
+    self.toggleSlider = function() {
+        $("#stack").slideToggle();
+    };
+
     //Click event handler which is called when the user clicks on a list item on screen.
     self.clickHandler = function(item) {
         self.placeNames.forEach(function(element) {
@@ -246,14 +232,14 @@ var viewModel = function() {
                 activateMarker(element, self.infowindow);
             }
         });
-    }
+    };
 
     //Search function to filter possible results based on user input.
     self.searchPlaces = function() {
 
         //Get string from search field and convert it to lowercase.
         var searchString = document.getElementById('searchBar').value.toLowerCase();
-        
+
         //Populate Knockout observable array with an empty array.
         //Note that placenames is a list of Place objects, whereas observableNames is an observable array containing names only.
         self.observableNames([]);
@@ -262,11 +248,11 @@ var viewModel = function() {
         //If typing has just started, all markers are invisible.
         self.placeNames.forEach(function(place) {
             place.marker.setVisible(false);
-        })
+        });
         self.infowindow.close();
 
         //For each place Object,
-        self.placeNames.forEach(function(place){
+        self.placeNames.forEach(function(place) {
 
             //If search string is part of the title of the place object,
             if (place.title.toLowerCase().indexOf(searchString) > -1) {
@@ -275,8 +261,6 @@ var viewModel = function() {
                 self.observableNames.push(place.title);
                 place.marker.setVisible(true);
             }
-        })
-        self.test.pop();
-    }
-}
-
+        });
+    };
+};
